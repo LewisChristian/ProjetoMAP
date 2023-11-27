@@ -69,21 +69,26 @@ class SistemaBancario:
             else:
                 print('Opção inválida. Tente novamente.')
 
-    # Alterado. Classe transacao removida
-    def realizar_transacao(self, conta_origem, conta_destino):
-        valor_transferencia = float(input("Digite o valor da transferência: "))
+    def realizar_transacao(self, conta_origem):
+        numero_conta_destino = int(input('Digite o número da conta de destino: '))
 
-        if conta_origem.sacar(valor_transferencia):
-            conta_destino.depositar(valor_transferencia)
-            print(f"Transferência de R${valor_transferencia} realizada de {conta_origem.titular} para {conta_destino.titular}.")
+        conta_destino = next((conta for conta in self.contas if conta.numero_conta == numero_conta_destino), None)
+
+        if conta_destino is not None:
+            valor_transferencia = float(input('Digite o valor da transferência: '))
+
+            if conta_origem.sacar(valor_transferencia):
+                conta_destino.depositar(valor_transferencia)
+                print(f'Transferência de R${valor_transferencia} realizada para a conta de {conta_destino.titular}.')
+            else:
+                print('Transferência não realizada. Saldo insuficiente na conta de origem.')
         else:
-            print("Transferência não realizada. Saldo insuficiente na conta de origem.")
+            print('Conta de destino não encontrada.')
 
     def listar_contas(self):
-
-        print('\n===== Contas Cadastradas =====')
+        print("\n===== Contas Cadastradas =====")
         for conta in self.contas:
-            conta.consultar_saldo()
+            print(f"Titular: {conta.titular} - Conta {conta.numero_conta} - Saldo: R${conta.saldo:.2f}")
 
     def menu_principal(self):
 
